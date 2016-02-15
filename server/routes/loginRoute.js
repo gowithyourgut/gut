@@ -9,7 +9,6 @@ var historyToArray = require('../functions/historyToArray');
 
 //log into account
 router.post('/', function(req, res){
-  console.log('inside loginRoute');
   var username = req.body.username;
   var password = req.body.password;
 
@@ -37,9 +36,7 @@ router.post('/', function(req, res){
               var token = jwt.sign(user, app.get('superSecret'), {
                 expiresIn: 1400 // expires in 24 hours
               });
-              //console.log('token in login: ', token)
               // serve token to client
-              console.log('user', user);
 
               res.json({
                 success: true,

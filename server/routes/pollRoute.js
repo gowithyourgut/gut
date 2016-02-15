@@ -10,7 +10,6 @@ router.get('/',function(req,res){
 	// serving 100 businesses (alternate way)
 	cities = _.shuffle(cities);
 	for (var i=0; i<5; i++){
-		console.log('city: ',cities[i]);
 		request_yelp({location:cities[i]},function(yelpErr,yelpRes,yelpBody){
 			if (yelpErr){
 				console.log('error fetching yelp data');

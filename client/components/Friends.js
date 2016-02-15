@@ -78,7 +78,6 @@ class Friends extends React.Component {
 
 
   render(){
-    console.log(this.props.avatarUrl);
     return(
       <div>
         <div className='add-user-container col-md-12'>

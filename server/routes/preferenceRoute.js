@@ -6,13 +6,11 @@ var topCategories = require('../topCategories');
 
 router.get('/', function(req,res) {
   var username = req.query.username;
-  console.log('line 8 username', username);
   db.User.findOne({username:username},function(err,user){
     if(err){
       console.log('err finding user');
       res.send(err);
     }else{
-      console.log('line 13 user.topCategories', user.topCategories);
       res.json(user.topCategories);
     }
   });
@@ -20,20 +18,17 @@ router.get('/', function(req,res) {
 
 router.delete('/',function(req,res){
   var username = req.body.username;
-  console.log('username',username);
   db.User.findOne({username:username},function(err,user){
     if(err){
       console.log('err finding user');
       res.send(err);
     }
     else{
-      console.log('found user');
       user.categories = {test:'test'};
       user.topCategories = topCategories;
       user.markModified('categories');
       user.markModified('topCategories');
       user.save(function(err,user){
-        console.log('updated user',user);
         res.json(user);
       })
     }
@@ -46,11 +41,6 @@ router.put('/',function(req,res){
   var unselected = req.body.unselected;
   var category = req.body.category;
   var multiplier = req.body.multiplier;
-  console.log('username',username);
-  console.log('selected',selected);
-  console.log('unselected',unselected);
-  console.log("category:", category);
-  console.log("multiplier:", multiplier);
 
   db.User.findOne({username: username}, function(err, user){
     if (err) {
@@ -58,7 +48,6 @@ router.put('/',function(req,res){
       res.send(err);
     }
     else {
-      console.log('found user', user);
 
       //if a category is liked or disliked, multiplier is set to 2 or 0 respectively
       if(category) {
@@ -108,7 +97,6 @@ router.put('/',function(req,res){
         }
 
         user.save(function(err,user){
-          console.log('updated user:',user);
           res.json(user);
         });
       }

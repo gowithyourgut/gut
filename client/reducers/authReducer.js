@@ -23,7 +23,6 @@ export default function authReducer(state = initialState, action){
         authErrorMsg: action.err
       })
     case ActionTypes.REGISTER_SUCCESS:
-    console.log(action.info);
       return Object.assign({}, state, {
         isFetching: false,
         isLoggedIn: true,

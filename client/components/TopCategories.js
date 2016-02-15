@@ -17,7 +17,8 @@ class TopCategories extends React.Component {
           pollActions={this.props.pollActions}
           category={category.name}
           username={this.props.username}
-          multiplier={category.multiplier} />
+          multiplier={category.multiplier}
+          wasReset={this.props.wasReset} />
       );
     });
   }

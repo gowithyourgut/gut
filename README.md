@@ -307,3 +307,7 @@ The preferences for that user are stored in the categories object, and is consta
 * [Shin Adachi](https://github.com/shin064)
 * [Justin Tan](https://github.com/justanman)
 * [Carl Bernardo](https://github.com/carlbernardo)
+* [Genevieve Kolve](https://github.com/genevieve314)
+* [Erik McGarruaugh](https://github.com/erikmcgarraugh)
+* [John Michelin](https://github.com/jmichelin)
+* [Ryan Reynolds](https://github.com/reynoldsryan)

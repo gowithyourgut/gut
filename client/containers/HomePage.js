@@ -108,8 +108,7 @@ class HomePage extends React.Component {
               <center><h4 className="step"> Step 3 </h4></center>
               <h4 className="describe"> Get Custom-Tailored Restaurant Recommendations </h4>
             </div>
-            <div className="gif col-xs-12 col-md-8"> 
-            </div>
+            <img className="gif col-xs-12 col-md-8" src="./../static/assets/home/options.jpg" />
           </div>
         </div>
         <div className="purpose text-center">
@@ -159,6 +158,42 @@ class HomePage extends React.Component {
                 <a href="https://www.linkedin.com/in/shin-adachi-1b6bb1113"><i className="fa fa-linkedin-square fa-2x"></i></a>&nbsp;&nbsp;
                 <a href="https://github.com/shin064" target="_blank"><i className="fa fa-github-square fa-2x"></i></a>
                 <h5>Likes React, Redux, and NPR podcasts.</h5></center>
+              </span>
+
+            </div>
+
+            <div className="row">
+
+              <span className="team-member col-md-3">
+                <center><image className="img-circle" height="135px" src="./../static/assets/team/genevieve.jpg"/>
+                <h3 className="member-name" >Genevieve Kolve</h3>
+                <a href="https://www.linkedin.com/in/genevievekolve"><i className="fa fa-linkedin-square fa-2x"></i></a>&nbsp;&nbsp;
+                <a href="https://github.com/genevieve314" target="_blank"><i className="fa fa-github-square fa-2x"></i></a>
+                <h5>Likes React, Redux, and yoga.</h5></center>
+              </span>
+
+              <span className="team-member col-md-3">
+                <center><image className="img-circle" height="135px" src="./../static/assets/team/erik.jpeg"/>
+                <h3 className="member-name" >Erik McGarraugh</h3>
+                <a href="https://www.linkedin.com/in/erikmcgarraugh"><i className="fa fa-linkedin-square fa-2x"></i></a>&nbsp;&nbsp;
+                <a href="https://github.com/erikmcgarraugh" target="_blank"><i className="fa fa-github-square fa-2x"></i></a>
+                <h5>Likes React, Redux, and algorithms.</h5></center>
+              </span>
+
+              <span className="team-member col-md-3">
+                <center><image className="img-circle" height="135px" src="./../static/assets/team/john.jpg"/>
+                <h3 className="member-name" >John Michelin</h3>
+                <a href="https://www.linkedin.com/in/johnmichelin"><i className="fa fa-linkedin-square fa-2x"></i></a>&nbsp;&nbsp;
+                <a href="https://github.com/jmichelin" target="_blank"><i className="fa fa-github-square fa-2x"></i></a>
+                <h5>Likes React, Redux, and snowboarding.</h5></center>
+              </span>
+
+              <span className="team-member col-md-3">
+                <center><image className="img-circle" height="135px" src="./../static/assets/team/ryan.jpg"/>
+                <h3 className="member-name" >Ryan Reynolds</h3>
+                <a href="https://www.linkedin.com/in/ryanscottreynolds"><i className="fa fa-linkedin-square fa-2x"></i></a>&nbsp;&nbsp;
+                <a href="https://github.com/reynoldsryan" target="_blank"><i className="fa fa-github-square fa-2x"></i></a>
+                <h5>Likes React, Redux, and video games.</h5></center>
               </span>
 
             </div>

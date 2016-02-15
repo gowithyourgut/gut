@@ -7,6 +7,13 @@ class TopCategoriesItem extends React.Component {
     this.handleDislike = this.handleDislike.bind(this);
   }
 
+  componentWillReceiveProps() {
+    if(this.props.wasReset === true) {
+      this.setButtons();
+    }
+    this.props.pollActions.resetComplete();
+  }
+
   setButtons() {
     if(this.props.multiplier === 2) {
       this.setState({
@@ -27,7 +34,6 @@ class TopCategoriesItem extends React.Component {
   }
 
   componentWillMount() {
-    console.log('line 11 CWM', this.props.category, this.props.multiplier);
     this.setButtons();
   }
 

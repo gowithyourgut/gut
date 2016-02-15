@@ -56,7 +56,6 @@ export const REFRESH_POLL = 'REFRESH_POLL';
 // Sends poll responses to backend
 export const sendPollChoices = (choices) => {
   return dispatch => {
-    console.log('INSIDE DISPATCH');
     dispatch(sendPollRequest(choices));
 
     return fetch('http://localhost:5679/preference', {
@@ -131,6 +130,7 @@ export const refreshPoll = () => {
 }
 
 export const RESET_SUCCESS = 'RESET_SUCCESS';
+export const RESET_COMPLETE = 'RESET_COMPLETE';
 
 //Clears previous preferences and
 //allows user to start with clean slate
@@ -157,10 +157,15 @@ export const resetPoll = (credentials) => {
 }
 
 const resetSuccess = (info) => {
-  console.log('line 160', info);
   return {
     type: RESET_SUCCESS,
     info
+  }
+}
+
+export const resetComplete = () => {
+  return {
+    type: RESET_COMPLETE
   }
 }
 
@@ -194,10 +199,7 @@ const loadTopCategories = (topCategories) => {
 
 // Sends liked category to backend
 export const likeCategory = (request) => {
-  console.log('inside likeCategory');
-  console.log("request:", request);
   return dispatch => {
-    console.log('inside dispatch');
 
     return fetch('http://localhost:5679/preference', {
       method: 'PUT',
@@ -221,7 +223,6 @@ export const likeCategory = (request) => {
 }
 
 const loadLikes = (info) => {
-  console.log("inside action creator:");
   return {
     type: LOAD_LIKES,
     info
@@ -229,12 +230,7 @@ const loadLikes = (info) => {
 }
 
 export const dislikeCategory = (request) => {
-  console.log('inside dislikeCategory');
-  console.log("request:", request);
   return dispatch => {
-    console.log('inside dispatch');
-
-    // dispatch(sendDislikedCategory(request));
 
     return fetch('http://localhost:5679/preference', {
       method: 'PUT',

@@ -10,8 +10,7 @@ export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 // Main Register Function
 export const registerUser = (credentials) => {
   return dispatch => {
-    console.log('credentials in registerUser authActions: ', credentials);
-    
+
     dispatch(registerRequest(credentials));
 
     return fetch('http://localhost:5679/signup', {
@@ -125,7 +124,6 @@ const authenticateError = (err) => {
 }
 
 const authenticateSuccess = (info) => {
-  console.log('info', info);
   return {
     type: AUTHENTICATE_SUCCESS,
     info
