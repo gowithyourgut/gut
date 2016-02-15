@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
-
-var db = {};
+var config = require('./config');
+var db = {uri: config.mongoURI};
 
 //******DATABASE SET UP
 
-db.dbURI = 'mongodb://localhost/gut';
-mongoose.connect(db.dbURI);
+mongoose.connect(db.uri);
 db.Schema = mongoose.Schema;
+console.log('db object in db: ', db);
 db.userSchema = new db.Schema ({
   username: { type: String, required: true, unique: true },
   password: { type: String },
