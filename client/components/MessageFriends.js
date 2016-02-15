@@ -10,24 +10,25 @@ class MessageFriends extends React.Component {
   }
 
   friendsString(){
-    const { userFriends } = this.props;
-    if(userFriends.length > 1){
+    const { diners } = this.props;
+    if(diners.length > 1){
       return this.concatFriends();
     }
     else {
-      return userFriends[0].firstname;
+      return diners[0];
     }
   }
 
   concatFriends(){
-    const { userFriends } = this.props;
-    let str = userFriends[0].firstname;
-    for(let i=1 ; i<userFriends.length ; i++){
-      if(i === userFriends.length-1){
-        str += ' & ' + userFriends[i].firstname;
+    const { diners } = this.props;
+    //console.log('diners in concatFriends: ', diners)
+    let str = diners[0];
+    for(let i=1 ; i<diners.length ; i++){
+      if(i === diners.length-1){
+        str += ' & ' + diners[i].friendName;
       }
       else {
-        str += ', ' + userFriends[i].firstname;
+        str += ', ' + diners[i].friendName;
       }
     }
     return str;
@@ -36,21 +37,21 @@ class MessageFriends extends React.Component {
   triggerSendMessage(e){
     e.preventDefault();
     const { sendMessage } = this.props.friendActions;
-    const { userFriends } = this.props;
+    const { diners } = this.props;
     const { mobile_url } = this.props.topRestaurant;
     const message = this.refs.message;
 
+    diners.shift();
+    console.log('diners to message in MessageFriends: ', diners);
+
     const messageObj = {
-      message: message.value,
-      sendTo: userFriends,
-      restaurantUrl: mobile_url
+      message: message.value + '/n' + mobile_url,
+      sendTo: diners,
     };
     sendMessage(messageObj);
   }
 
   render(){
-    console.log('+++| 49 | props in MessageFriends: ', this.props);
-
     return(
       <Modal
         show={this.props.showMessageModal}

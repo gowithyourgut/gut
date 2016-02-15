@@ -152,13 +152,14 @@ class RestaurantPref extends React.Component {
         reviews = 'review'
       }
 
-      console.log('xxx', startLng, startLat)
-
       let directionsButton = !(startLat.slice(-10) === '°0\'0.0000"' && startLng.slice(-10) === '°0\'0.0000"') ? (<a href={directionsUrl} target='_blank'>
           <Button className='top-button'>
             Get Directions
           </Button>
         </a>) : ( null )
+
+      const { diners } = this.props;
+      console.log('+++|157| diners in RestaurantPref: ', diners);
 
       return (
         <div className='row bottom non-button'>
