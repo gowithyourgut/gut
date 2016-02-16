@@ -1,7 +1,5 @@
 # SnapPea
 
-#### Follow your gut.
-
 ## Developer Documentation
 #### Tools Used:
 * [React](https://facebook.github.io/react/)
@@ -26,7 +24,7 @@
 * [Google Places API Web Service](https://developers.google.com/places/?hl=en_US)
 * [Uber API](https://developer.uber.com/docs)
 
-#### To start contributing to the Gut codebase:
+#### To start contributing to the SnapPea codebase:
 * Fork the repo
 * Clone your fork locally
 * Ensure MongoDB is installed. If not, install MongoDB globally

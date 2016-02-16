@@ -29418,7 +29418,7 @@
 	                  _react2.default.createElement(
 	                    'h5',
 	                    null,
-	                    'Likes React, Redux, and algorithms.'
+	                    'Likes React, Redux, and electronics.'
 	                  )
 	                )
 	              ),
