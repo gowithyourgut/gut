@@ -189,7 +189,7 @@ class HomePage extends React.Component {
               </span>
 
               <span className="team-member col-md-3">
-                <center><image className="img-circle" height="135px" src="./../static/assets/team/ryan.jpg"/>
+                <center><image className="img-circle" height="135px" src="./../static/assets/team/ryan2.jpg"/>
                 <h3 className="member-name" >Ryan Reynolds</h3>
                 <a href="https://www.linkedin.com/in/ryanscottreynolds"><i className="fa fa-linkedin-square fa-2x"></i></a>&nbsp;&nbsp;
                 <a href="https://github.com/reynoldsryan" target="_blank"><i className="fa fa-github-square fa-2x"></i></a>

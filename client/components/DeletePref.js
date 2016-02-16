@@ -32,8 +32,8 @@ class DeletePref extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <h1>Are you sure you want to delete your preferences?</h1>
-          <Button onClick={this.handleReset}>Yes, delete my preferences</Button>
-          <Button onClick={closeDeleteModal}>No, I changed my mind</Button>
+          <Button onClick={this.handleReset}>Yes, delete my preferences.</Button>
+          <Button className='cancel-button' onClick={closeDeleteModal}>No, I changed my mind.</Button>
         </Modal.Body>
       </Modal>
     )
