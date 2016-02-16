@@ -3,6 +3,13 @@
 #Dependencies
 node_modules
 
+#Webpack Bundle
+client/dist/
+
+#Config File (API Keys)
+server/config.js
+yelp.api.key
+
 #NPM Debug Log
 npm-debug.log.*
 
