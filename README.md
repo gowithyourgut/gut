@@ -3,17 +3,17 @@
 ## Developer Documentation
 #### Tools Used:
 * [React](https://facebook.github.io/react/)
-* [Redux](http://redux.js.org/)
+* [Redux](https://redux.js.org/)
 * [React Router](https://github.com/rackt/react-router)
 * [React Router Redux](https://github.com/rackt/react-router-redux)
 * [Babel](https://babeljs.io/)
 * [Webpack](https://webpack.github.io/)
 * [Node](https://nodejs.org/en/)
-* [Express](http://expressjs.com/)
-* [Mongoose](http://mongoosejs.com/)
+* [Express](https://expressjs.com/)
+* [Mongoose](https://mongoosejs.com/)
 * [MongoDB](https://www.mongodb.org/)
-* [Sass](http://sass-lang.com/)
-* [Bootstrap](http://getbootstrap.com/)
+* [Sass](https://sass-lang.com/)
+* [Bootstrap](https://getbootstrap.com/)
 * [React Bootstrap](https://react-bootstrap.github.io/)
 
 #### APIs Used:

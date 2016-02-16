@@ -29,7 +29,7 @@ router.put('/',function(req,res){
 		var year = d.getFullYear();
 		user.beenTo[restaurantId]={
 			name:restaurantName,
-			url:'http://www.yelp.com/biz/'+restaurantId,
+			url:'https://www.yelp.com/biz/'+restaurantId,
 			date:Date.now(),
 			prettyDate:month+'/'+day+'/'+year,
 			restaruantId:restaurantId,
