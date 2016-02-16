@@ -177,7 +177,7 @@ class HomePage extends React.Component {
                 <h3 className="member-name" >Erik McGarraugh</h3>
                 <a href="https://www.linkedin.com/in/erikmcgarraugh"><i className="fa fa-linkedin-square fa-2x"></i></a>&nbsp;&nbsp;
                 <a href="https://github.com/erikmcgarraugh" target="_blank"><i className="fa fa-github-square fa-2x"></i></a>
-                <h5>Likes React, Redux, and algorithms.</h5></center>
+                <h5>Likes React, Redux, and electronics.</h5></center>
               </span>
 
               <span className="team-member col-md-3">
