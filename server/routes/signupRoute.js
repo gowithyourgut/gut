@@ -41,7 +41,7 @@ router.post('/', function(req, res) {
         beenTo: {test:false},
         gravatarUrl: gravatarUrl,
         searchTerm: username+firstname+lastname,
-        avatarUrl: "http://localhost:5679/static/assets/default_pea.png"
+        avatarUrl: "/static/assets/default_pea.png"
       });
 
       user.markModified('categories');
@@ -78,7 +78,7 @@ router.post('/', function(req, res) {
                   firstname: user.firstname,
                   lastname: user.lastname,
                   businesses:businesses,
-                  avatarUrl: "http://localhost:5679/static/assets/default_pea.png"
+                  avatarUrl: "/static/assets/default_pea.png"
                 });//end of res.json
           })//end of request_yelp
         }//end of else

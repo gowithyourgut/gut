@@ -22584,7 +22584,7 @@
 	
 	    dispatch(registerRequest(credentials));
 	
-	    return fetch('http://localhost:5679/signup', {
+	    return fetch('/signup', {
 	      method: 'POST',
 	      headers: {
 	        'Accept': 'application/json',
@@ -22649,7 +22649,7 @@
 	  return function (dispatch) {
 	    dispatch(registerRequest);
 	
-	    return fetch('http://localhost:5679/authenticate', {
+	    return fetch('/authenticate', {
 	      method: 'POST',
 	      headers: {
 	        'Accept': 'application/json',
@@ -22709,7 +22709,7 @@
 	  return function (dispatch) {
 	    dispatch(signinRequest(credentials));
 	
-	    return fetch('http://localhost:5679/login', {
+	    return fetch('/login', {
 	      method: 'POST',
 	      headers: {
 	        'Accept': 'application/json',
@@ -22819,7 +22819,7 @@
 	  return function (dispatch) {
 	    dispatch(loadYelpRequest());
 	
-	    return fetch('http://localhost:5679/poll', {
+	    return fetch('/poll', {
 	      method: 'GET',
 	      headers: {
 	        'Accept': 'application/json',
@@ -22866,7 +22866,7 @@
 	  return function (dispatch) {
 	    dispatch(sendPollRequest(choices));
 	
-	    return fetch('http://localhost:5679/preference', {
+	    return fetch('/preference', {
 	      method: 'PUT',
 	      headers: {
 	        'Accept': 'application/json',
@@ -22944,7 +22944,7 @@
 	//allows user to start with clean slate
 	var resetPoll = exports.resetPoll = function resetPoll(credentials) {
 	  return function (dispatch) {
-	    return fetch('http://localhost:5679/preference', {
+	    return fetch('/preference', {
 	      method: 'DELETE',
 	      headers: {
 	        'Accept': 'application/json',
@@ -22981,7 +22981,7 @@
 	
 	var fetchTopCategories = exports.fetchTopCategories = function fetchTopCategories(username) {
 	  return function (dispatch) {
-	    return fetch('http://localhost:5679/preference?username=' + username, {
+	    return fetch('/preference?username=' + username, {
 	      method: 'GET',
 	      headers: {
 	        'Accept': 'application/json',
@@ -23006,7 +23006,7 @@
 	var likeCategory = exports.likeCategory = function likeCategory(request) {
 	  return function (dispatch) {
 	
-	    return fetch('http://localhost:5679/preference', {
+	    return fetch('/preference', {
 	      method: 'PUT',
 	      headers: {
 	        'Accept': 'application/json',
@@ -23035,7 +23035,7 @@
 	var dislikeCategory = exports.dislikeCategory = function dislikeCategory(request) {
 	  return function (dispatch) {
 	
-	    return fetch('http://localhost:5679/preference', {
+	    return fetch('/preference', {
 	      method: 'PUT',
 	      headers: {
 	        'Accept': 'application/json',
@@ -23075,7 +23075,7 @@
 	    dispatch(loadingResults());
 	
 	    if (!location) {
-	      return fetch('http://localhost:5679/eat?diners=' + dinersString, {
+	      return fetch('/eat?diners=' + dinersString, {
 	        method: 'GET',
 	        headers: {
 	          'Accept': 'application/json',
@@ -23092,7 +23092,7 @@
 	        }
 	      });
 	    } else {
-	      return fetch('http://localhost:5679/eat?diners=' + dinersString + '&location=' + locationString, {
+	      return fetch('/eat?diners=' + dinersString + '&location=' + locationString, {
 	        method: 'GET',
 	        headers: {
 	          'Accept': 'application/json',
@@ -23199,7 +23199,7 @@
 	  return function (dispatch) {
 	    dispatch(addToHistoryRequest());
 	
-	    return fetch('http://localhost:5679/history', {
+	    return fetch('/history', {
 	      method: 'PUT',
 	      headers: {
 	        'Accept': 'application/json',
@@ -23257,7 +23257,7 @@
 	// Clears user restaurant history
 	var clearHistory = exports.clearHistory = function clearHistory(info) {
 	  return function (dispatch) {
-	    return fetch('http://localhost:5679/history', {
+	    return fetch('/history', {
 	      method: 'DELETE',
 	      headers: {
 	        'Accept': 'application/json',
@@ -23303,7 +23303,7 @@
 	        bizLatitude: bizLatitude,
 	        bizLongitude: bizLongitude
 	      });
-	      return fetch('http://localhost:5679/uber?' + "coord=" + coord, {
+	      return fetch('/uber?' + "coord=" + coord, {
 	        method: 'GET',
 	        headers: {
 	          'Accept': 'application/json',
@@ -23577,7 +23577,7 @@
 	  uberData: {},
 	  isLoadingUberData: false,
 	  pickupLocation: [],
-	  avatarUrl: 'http://localhost:5679/static/assets/default_pea.png'
+	  avatarUrl: '/static/assets/default_pea.png'
 	};
 	
 	function dinerReducer() {
@@ -23898,7 +23898,7 @@
 	  return function (dispatch) {
 	    dispatch(loadRequest());
 	
-	    return fetch('http://localhost:5679/friends?username=' + user, {
+	    return fetch('/friends?username=' + user, {
 	      method: 'GET',
 	      headers: {
 	        'Accept': 'application/json',
@@ -23939,7 +23939,7 @@
 	  return function (dispatch) {
 	    dispatch(searchRequest(query));
 	
-	    return fetch('http://localhost:5679/users?username=' + username + '&searchTerm=' + searchTerm, {
+	    return fetch('/users?username=' + username + '&searchTerm=' + searchTerm, {
 	      method: 'GET',
 	      headers: {
 	        'Accept': 'application/json',
@@ -23988,7 +23988,7 @@
 	  return function (dispatch) {
 	    dispatch(addRequest());
 	
-	    return fetch('http://localhost:5679/addfriend', {
+	    return fetch('/addfriend', {
 	      method: 'PUT',
 	      headers: {
 	        'Accept': 'application/json',
@@ -24029,7 +24029,7 @@
 	  return function (dispatch) {
 	    dispatch(removeRequest());
 	
-	    return fetch('http://localhost:5679/removefriend', {
+	    return fetch('/removefriend', {
 	      method: 'DELETE',
 	      headers: {
 	        'Accept': 'application/json',
@@ -24073,7 +24073,7 @@
 	var sendMessage = exports.sendMessage = function sendMessage(messageObj) {
 	
 	  return function (dispatch) {
-	    return fetch('http://localhost:5679/sms', {
+	    return fetch('/sms', {
 	      method: 'POST',
 	      headers: {
 	        'Accept': 'application/json',
@@ -49218,7 +49218,7 @@
 	      var username = this.props.username;
 	      var syncAvatarUrl = this.props.dinerActions.syncAvatarUrl;
 	
-	      syncAvatarUrl('http://localhost:5679/static/assets/avatar/' + username);
+	      syncAvatarUrl('/static/assets/avatar/' + username);
 	      var closePicModal = this.props.closePicModal;
 	
 	      closePicModal();

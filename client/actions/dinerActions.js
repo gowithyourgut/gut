@@ -12,7 +12,7 @@ export const fetchSnapPeaData = (diners, location) => {
     dispatch(loadingResults());
 
     if(!location){
-      return fetch('http://localhost:5679/eat?diners=' + dinersString, {
+      return fetch('/eat?diners=' + dinersString, {
        method: 'GET',
        headers: {
          'Accept': 'application/json',
@@ -31,7 +31,7 @@ export const fetchSnapPeaData = (diners, location) => {
        }
      })
    } else {
-     return fetch('http://localhost:5679/eat?diners=' + dinersString + '&location=' + locationString, {
+     return fetch('/eat?diners=' + dinersString + '&location=' + locationString, {
        method: 'GET',
        headers: {
          'Accept': 'application/json',
@@ -141,7 +141,7 @@ export const addToHistory = (info) => {
   return dispatch => {
     dispatch(addToHistoryRequest());
 
-    return fetch('http://localhost:5679/history', {
+    return fetch('/history', {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
@@ -200,7 +200,7 @@ export const CLEAR_HISTORY_SUCCESS = 'CLEAR_HISTORY_SUCCESS';
 // Clears user restaurant history
 export const clearHistory = (info) => {
   return dispatch => {
-    return fetch('http://localhost:5679/history', {
+    return fetch('/history', {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',
@@ -247,7 +247,7 @@ export const fetchUberData = (bizLatitude, bizLongitude) => {
         bizLatitude: bizLatitude,
         bizLongitude: bizLongitude
       })
-      return fetch('http://localhost:5679/uber?' + "coord=" + coord, {
+      return fetch('/uber?' + "coord=" + coord, {
          method: 'GET',
          headers: {
            'Accept': 'application/json',

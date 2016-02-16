@@ -13,7 +13,7 @@ export const registerUser = (credentials) => {
 
     dispatch(registerRequest(credentials));
 
-    return fetch('http://localhost:5679/signup', {
+    return fetch('/signup', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -79,7 +79,7 @@ export const authenticateUser = (token) => {
   return dispatch => {
     dispatch(registerRequest);
 
-    return fetch('http://localhost:5679/authenticate', {
+    return fetch('/authenticate', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -140,7 +140,7 @@ export const signinUser = (credentials) => {
   return dispatch => {
     dispatch(signinRequest(credentials));
 
-    return fetch('http://localhost:5679/login', {
+    return fetch('/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
