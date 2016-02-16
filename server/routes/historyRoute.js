@@ -5,8 +5,6 @@ var db = require('../db');
 var historyToArray = require('../functions/historyToArray');
 
 router.put('/',function(req,res){
-	console.log('inside historyRoute');
-	console.log('req.body: ',req.body);
 	//add call to yelp api here to get more details on the restarant?
 	var username = req.body.username;
 	var restaurantName = req.body.restaurantName;

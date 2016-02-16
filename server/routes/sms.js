@@ -6,6 +6,7 @@ var auth = require('../utilities/utils');
 var client = require('twilio')(auth.twilioSID, auth.twilioToken);
 
 router.post('/', function(req, res){
+  console.log('send to in sms route: ', req.body.sendTo)
   var diners = req.body.sendTo;
   var message = req.body.message;
   var sid = [];
