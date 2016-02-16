@@ -4,7 +4,6 @@ module.exports = function(requestObj,res,diners){ //account for multiple diners
 
 	request_yelp(requestObj,function(yelpErr,yelpRes,yelpBody){
 		if (yelpErr){
-			//console.log('error finding businesses');
 			res.send(yelpErr);
 		}
 		var parsed = JSON.parse(yelpBody);
@@ -15,13 +14,11 @@ module.exports = function(requestObj,res,diners){ //account for multiple diners
 		})
 
 		for (var i = 0; i < diners.length; i++) {
-			businesses.forEach(function(business){ //for each biz
-				var categories = business.categories; // obj of cat
+			businesses.forEach(function(business){
+				var categories = business.categories;
 				var sum = 0;
-				categories.forEach(function(category){ //for each cat
-					//sets categoryName to uppercase category (e.g., category = ['Japanese', 'japanese']);
+				categories.forEach(function(category){
 					var categoryName = category[0];
-					// for each user {categories: {<categoryoffood>: [<num of times selected>, <num of times seen>, <multiplier>]}
 					if (diners[i].categories[categoryName]){
 						var numerator = diners[i].categories[categoryName][0] * diners[i].categories[categoryName][2];
 						var denominator = diners[i].categories[categoryName][1];
@@ -40,6 +37,7 @@ module.exports = function(requestObj,res,diners){ //account for multiple diners
 		businesses.forEach(function(business){
 			totalWeight += business.weight;
 		});
+
 		//below returns recommendations in slightly shuffled way so as not to return same list everytime
 		var recommendations = [];
 		while (businesses.length) {
@@ -48,7 +46,6 @@ module.exports = function(requestObj,res,diners){ //account for multiple diners
 			for (var i=0; i<businesses.length; i++){
 				current+=businesses[i].weight;
 				if (current>index) {
-					//var chosen = businesses[i];
 					break;
 				}
 			}

@@ -5,7 +5,6 @@ class RestaurantHistory extends React.Component {
 
   render(){
     const { restaurantName, link, date, city, restaruantId, rating, phone, image } = this.props;
-    console.log('+++ logging city = >', city);
     return (
       <div>
         <li className='list-group-item'>

@@ -12,7 +12,6 @@ class AddFriend extends React.Component {
       username: username,
       friendname: friendName
     }
-    console.log('+++|15| this.props in AddFriend: ', this.props);
 
     addFriend(addFriendInfo);
   }

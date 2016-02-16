@@ -76,7 +76,6 @@ class RestaurantPref extends React.Component {
 
   closeMessageModal(){
     this.setState({showMessageModal: false})
-  //console.log('+++| 77 | state.showMessageModal: ', this.state.showMessageModal);
   }
 
   closeFavoriteModal(){
@@ -159,7 +158,6 @@ class RestaurantPref extends React.Component {
         </a>) : ( null )
 
       const { diners } = this.props;
-      console.log('+++|157| diners in RestaurantPref: ', diners);
 
       return (
         <div className='row bottom non-button'>
