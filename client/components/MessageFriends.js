@@ -21,7 +21,6 @@ class MessageFriends extends React.Component {
 
   concatFriends(){
     const { diners } = this.props;
-    //console.log('diners in concatFriends: ', diners)
     let str = diners[0];
     for(let i=1 ; i<diners.length ; i++){
       if(i === diners.length-1){
@@ -42,7 +41,6 @@ class MessageFriends extends React.Component {
     const message = this.refs.message;
 
     diners.shift();
-    console.log('diners to message in MessageFriends: ', diners);
 
     const messageObj = {
       message: message.value + '/n' + mobile_url,

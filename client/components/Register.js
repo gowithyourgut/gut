@@ -112,7 +112,6 @@ class Register extends React.Component {
 
   handleClick(e){
     e.preventDefault();
-    console.log('in handleClick Register');
     if(!this.isFormError()){
       const { registerUser } = this.props.authActions;
       const firstname = this.refs.firstname;
@@ -129,7 +128,6 @@ class Register extends React.Component {
         email: email.value,
         phone: phone.value
       };
-      console.log('userInfo in Register: ', userInfo);
 
       registerUser(userInfo);
 
