@@ -2,11 +2,12 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
+var config = require('./config');
 var app = express();
 var port = process.env.PORT || 5679;
 
 //auth
-var jwtSecret = 'thupers3crT$14';
+var jwtSecret = config.jwtSecret;
 app.set('superSecret', jwtSecret);
 
 app.use(function(req, res, next){

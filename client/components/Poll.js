@@ -9,7 +9,24 @@ class Poll extends React.Component {
     super();
   }
 
+  displayOptionalPrefs() {
+    if(this.props.displayPreferences) {
+      return(
+        <div>
+          <h1>Optional <span className='cursive'>preferences</span></h1>
+          <p>If you wish to increase (or decrease) the likelihood of seeing particular restaurant categories, feel free to like (or dislike) them here.</p>
+          <TopCategories
+            pollActions={this.props.pollActions}
+            topCategories={this.props.topCategories}
+            username={this.props.username}
+            wasReset={this.props.wasReset}/>
+        </div>
+      );
+    }
+  }
+
   render(){
+    console.log("this.props:", this.props);
     return (
       <div>
         <div className='poll-header'>
@@ -19,13 +36,7 @@ class Poll extends React.Component {
             data={this.props.data}
             username={this.props.username}
             categories={this.props.categories} />
-          <h1>Optional <span className='cursive'>preferences</span></h1>
-          <p>If you wish to increase (or decrease) the likelihood of seeing particular restaurant categories, feel free to like (or dislike) them here.</p>
-          <TopCategories
-            pollActions={this.props.pollActions}
-            topCategories={this.props.topCategories}
-            username={this.props.username}
-            wasReset={this.props.wasReset}/>
+          {this.displayOptionalPrefs()}
         </div>
       </div>
     );

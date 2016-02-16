@@ -28,10 +28,10 @@ class ClearHistory extends React.Component {
         <Modal.Body>
           <h1>Are you sure you want to clear your restaurant history?</h1>
           <Button onClick={this.handleClearHistory}>
-            Yes, clear my restaurant history
+            Yes, clear my restaurant history.
           </Button>
-          <Button onClick={closeClearModal}>
-            No, I changed my mind
+          <Button className='cancel-button' onClick={closeClearModal}>
+            No, I changed my mind.
           </Button>
         </Modal.Body>
       </Modal>
