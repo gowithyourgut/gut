@@ -101,7 +101,7 @@
 	
 	var _HomePage2 = _interopRequireDefault(_HomePage);
 	
-	__webpack_require__(729);
+	__webpack_require__(730);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -48036,7 +48036,7 @@
 	        _react2.default.createElement(_Navigation2.default, this.props),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'container' },
+	          { className: 'container margin-bottom' },
 	          this.displayProfile()
 	        )
 	      );
@@ -54026,7 +54026,7 @@
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
 	 *            See https://raw.githubusercontent.com/jakearchibald/es6-promise/master/LICENSE
-	 * @version   3.1.2
+	 * @version   3.0.2
 	 */
 	
 	(function() {
@@ -54054,6 +54054,7 @@
 	
 	    var lib$es6$promise$utils$$isArray = lib$es6$promise$utils$$_isArray;
 	    var lib$es6$promise$asap$$len = 0;
+	    var lib$es6$promise$asap$$toString = {}.toString;
 	    var lib$es6$promise$asap$$vertxNext;
 	    var lib$es6$promise$asap$$customSchedulerFn;
 	
@@ -54172,42 +54173,6 @@
 	    } else {
 	      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useSetTimeout();
 	    }
-	    function lib$es6$promise$then$$then(onFulfillment, onRejection) {
-	      var parent = this;
-	      var state = parent._state;
-	
-	      if (state === lib$es6$promise$$internal$$FULFILLED && !onFulfillment || state === lib$es6$promise$$internal$$REJECTED && !onRejection) {
-	        return this;
-	      }
-	
-	      var child = new this.constructor(lib$es6$promise$$internal$$noop);
-	      var result = parent._result;
-	
-	      if (state) {
-	        var callback = arguments[state - 1];
-	        lib$es6$promise$asap$$asap(function(){
-	          lib$es6$promise$$internal$$invokeCallback(state, child, callback, result);
-	        });
-	      } else {
-	        lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection);
-	      }
-	
-	      return child;
-	    }
-	    var lib$es6$promise$then$$default = lib$es6$promise$then$$then;
-	    function lib$es6$promise$promise$resolve$$resolve(object) {
-	      /*jshint validthis:true */
-	      var Constructor = this;
-	
-	      if (object && typeof object === 'object' && object.constructor === Constructor) {
-	        return object;
-	      }
-	
-	      var promise = new Constructor(lib$es6$promise$$internal$$noop);
-	      lib$es6$promise$$internal$$resolve(promise, object);
-	      return promise;
-	    }
-	    var lib$es6$promise$promise$resolve$$default = lib$es6$promise$promise$resolve$$resolve;
 	
 	    function lib$es6$promise$$internal$$noop() {}
 	
@@ -54281,12 +54246,12 @@
 	      }
 	    }
 	
-	    function lib$es6$promise$$internal$$handleMaybeThenable(promise, maybeThenable, then) {
-	      if (maybeThenable.constructor === promise.constructor &&
-	          then === lib$es6$promise$then$$default &&
-	          constructor.resolve === lib$es6$promise$promise$resolve$$default) {
+	    function lib$es6$promise$$internal$$handleMaybeThenable(promise, maybeThenable) {
+	      if (maybeThenable.constructor === promise.constructor) {
 	        lib$es6$promise$$internal$$handleOwnThenable(promise, maybeThenable);
 	      } else {
+	        var then = lib$es6$promise$$internal$$getThen(maybeThenable);
+	
 	        if (then === lib$es6$promise$$internal$$GET_THEN_ERROR) {
 	          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$GET_THEN_ERROR.error);
 	        } else if (then === undefined) {
@@ -54303,7 +54268,7 @@
 	      if (promise === value) {
 	        lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$selfFulfillment());
 	      } else if (lib$es6$promise$utils$$objectOrFunction(value)) {
-	        lib$es6$promise$$internal$$handleMaybeThenable(promise, value, lib$es6$promise$$internal$$getThen(value));
+	        lib$es6$promise$$internal$$handleMaybeThenable(promise, value);
 	      } else {
 	        lib$es6$promise$$internal$$fulfill(promise, value);
 	      }
@@ -54438,6 +54403,104 @@
 	      }
 	    }
 	
+	    function lib$es6$promise$enumerator$$Enumerator(Constructor, input) {
+	      var enumerator = this;
+	
+	      enumerator._instanceConstructor = Constructor;
+	      enumerator.promise = new Constructor(lib$es6$promise$$internal$$noop);
+	
+	      if (enumerator._validateInput(input)) {
+	        enumerator._input     = input;
+	        enumerator.length     = input.length;
+	        enumerator._remaining = input.length;
+	
+	        enumerator._init();
+	
+	        if (enumerator.length === 0) {
+	          lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
+	        } else {
+	          enumerator.length = enumerator.length || 0;
+	          enumerator._enumerate();
+	          if (enumerator._remaining === 0) {
+	            lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
+	          }
+	        }
+	      } else {
+	        lib$es6$promise$$internal$$reject(enumerator.promise, enumerator._validationError());
+	      }
+	    }
+	
+	    lib$es6$promise$enumerator$$Enumerator.prototype._validateInput = function(input) {
+	      return lib$es6$promise$utils$$isArray(input);
+	    };
+	
+	    lib$es6$promise$enumerator$$Enumerator.prototype._validationError = function() {
+	      return new Error('Array Methods must be provided an Array');
+	    };
+	
+	    lib$es6$promise$enumerator$$Enumerator.prototype._init = function() {
+	      this._result = new Array(this.length);
+	    };
+	
+	    var lib$es6$promise$enumerator$$default = lib$es6$promise$enumerator$$Enumerator;
+	
+	    lib$es6$promise$enumerator$$Enumerator.prototype._enumerate = function() {
+	      var enumerator = this;
+	
+	      var length  = enumerator.length;
+	      var promise = enumerator.promise;
+	      var input   = enumerator._input;
+	
+	      for (var i = 0; promise._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
+	        enumerator._eachEntry(input[i], i);
+	      }
+	    };
+	
+	    lib$es6$promise$enumerator$$Enumerator.prototype._eachEntry = function(entry, i) {
+	      var enumerator = this;
+	      var c = enumerator._instanceConstructor;
+	
+	      if (lib$es6$promise$utils$$isMaybeThenable(entry)) {
+	        if (entry.constructor === c && entry._state !== lib$es6$promise$$internal$$PENDING) {
+	          entry._onerror = null;
+	          enumerator._settledAt(entry._state, i, entry._result);
+	        } else {
+	          enumerator._willSettleAt(c.resolve(entry), i);
+	        }
+	      } else {
+	        enumerator._remaining--;
+	        enumerator._result[i] = entry;
+	      }
+	    };
+	
+	    lib$es6$promise$enumerator$$Enumerator.prototype._settledAt = function(state, i, value) {
+	      var enumerator = this;
+	      var promise = enumerator.promise;
+	
+	      if (promise._state === lib$es6$promise$$internal$$PENDING) {
+	        enumerator._remaining--;
+	
+	        if (state === lib$es6$promise$$internal$$REJECTED) {
+	          lib$es6$promise$$internal$$reject(promise, value);
+	        } else {
+	          enumerator._result[i] = value;
+	        }
+	      }
+	
+	      if (enumerator._remaining === 0) {
+	        lib$es6$promise$$internal$$fulfill(promise, enumerator._result);
+	      }
+	    };
+	
+	    lib$es6$promise$enumerator$$Enumerator.prototype._willSettleAt = function(promise, i) {
+	      var enumerator = this;
+	
+	      lib$es6$promise$$internal$$subscribe(promise, undefined, function(value) {
+	        enumerator._settledAt(lib$es6$promise$$internal$$FULFILLED, i, value);
+	      }, function(reason) {
+	        enumerator._settledAt(lib$es6$promise$$internal$$REJECTED, i, reason);
+	      });
+	    };
 	    function lib$es6$promise$promise$all$$all(entries) {
 	      return new lib$es6$promise$enumerator$$default(this, entries).promise;
 	    }
@@ -54470,6 +54533,19 @@
 	      return promise;
 	    }
 	    var lib$es6$promise$promise$race$$default = lib$es6$promise$promise$race$$race;
+	    function lib$es6$promise$promise$resolve$$resolve(object) {
+	      /*jshint validthis:true */
+	      var Constructor = this;
+	
+	      if (object && typeof object === 'object' && object.constructor === Constructor) {
+	        return object;
+	      }
+	
+	      var promise = new Constructor(lib$es6$promise$$internal$$noop);
+	      lib$es6$promise$$internal$$resolve(promise, object);
+	      return promise;
+	    }
+	    var lib$es6$promise$promise$resolve$$default = lib$es6$promise$promise$resolve$$resolve;
 	    function lib$es6$promise$promise$reject$$reject(reason) {
 	      /*jshint validthis:true */
 	      var Constructor = this;
@@ -54600,8 +54676,15 @@
 	      this._subscribers = [];
 	
 	      if (lib$es6$promise$$internal$$noop !== resolver) {
-	        typeof resolver !== 'function' && lib$es6$promise$promise$$needsResolver();
-	        this instanceof lib$es6$promise$promise$$Promise ? lib$es6$promise$$internal$$initializePromise(this, resolver) : lib$es6$promise$promise$$needsNew();
+	        if (!lib$es6$promise$utils$$isFunction(resolver)) {
+	          lib$es6$promise$promise$$needsResolver();
+	        }
+	
+	        if (!(this instanceof lib$es6$promise$promise$$Promise)) {
+	          lib$es6$promise$promise$$needsNew();
+	        }
+	
+	        lib$es6$promise$$internal$$initializePromise(this, resolver);
 	      }
 	    }
 	
@@ -54809,7 +54892,28 @@
 	      Useful for tooling.
 	      @return {Promise}
 	    */
-	      then: lib$es6$promise$then$$default,
+	      then: function(onFulfillment, onRejection) {
+	        var parent = this;
+	        var state = parent._state;
+	
+	        if (state === lib$es6$promise$$internal$$FULFILLED && !onFulfillment || state === lib$es6$promise$$internal$$REJECTED && !onRejection) {
+	          return this;
+	        }
+	
+	        var child = new this.constructor(lib$es6$promise$$internal$$noop);
+	        var result = parent._result;
+	
+	        if (state) {
+	          var callback = arguments[state - 1];
+	          lib$es6$promise$asap$$asap(function(){
+	            lib$es6$promise$$internal$$invokeCallback(state, child, callback, result);
+	          });
+	        } else {
+	          lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection);
+	        }
+	
+	        return child;
+	      },
 	
 	    /**
 	      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
@@ -54841,97 +54945,6 @@
 	      'catch': function(onRejection) {
 	        return this.then(null, onRejection);
 	      }
-	    };
-	    var lib$es6$promise$enumerator$$default = lib$es6$promise$enumerator$$Enumerator;
-	    function lib$es6$promise$enumerator$$Enumerator(Constructor, input) {
-	      this._instanceConstructor = Constructor;
-	      this.promise = new Constructor(lib$es6$promise$$internal$$noop);
-	
-	      if (Array.isArray(input)) {
-	        this._input     = input;
-	        this.length     = input.length;
-	        this._remaining = input.length;
-	
-	        this._result = new Array(this.length);
-	
-	        if (this.length === 0) {
-	          lib$es6$promise$$internal$$fulfill(this.promise, this._result);
-	        } else {
-	          this.length = this.length || 0;
-	          this._enumerate();
-	          if (this._remaining === 0) {
-	            lib$es6$promise$$internal$$fulfill(this.promise, this._result);
-	          }
-	        }
-	      } else {
-	        lib$es6$promise$$internal$$reject(this.promise, this._validationError());
-	      }
-	    }
-	
-	    lib$es6$promise$enumerator$$Enumerator.prototype._validationError = function() {
-	      return new Error('Array Methods must be provided an Array');
-	    };
-	
-	    lib$es6$promise$enumerator$$Enumerator.prototype._enumerate = function() {
-	      var length  = this.length;
-	      var input   = this._input;
-	
-	      for (var i = 0; this._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
-	        this._eachEntry(input[i], i);
-	      }
-	    };
-	
-	    lib$es6$promise$enumerator$$Enumerator.prototype._eachEntry = function(entry, i) {
-	      var c = this._instanceConstructor;
-	      var resolve = c.resolve;
-	
-	      if (resolve === lib$es6$promise$promise$resolve$$default) {
-	        var then = lib$es6$promise$$internal$$getThen(entry);
-	
-	        if (then === lib$es6$promise$then$$default &&
-	            entry._state !== lib$es6$promise$$internal$$PENDING) {
-	          this._settledAt(entry._state, i, entry._result);
-	        } else if (typeof then !== 'function') {
-	          this._remaining--;
-	          this._result[i] = entry;
-	        } else if (c === lib$es6$promise$promise$$default) {
-	          var promise = new c(lib$es6$promise$$internal$$noop);
-	          lib$es6$promise$$internal$$handleMaybeThenable(promise, entry, then);
-	          this._willSettleAt(promise, i);
-	        } else {
-	          this._willSettleAt(new c(function(resolve) { resolve(entry); }), i);
-	        }
-	      } else {
-	        this._willSettleAt(resolve(entry), i);
-	      }
-	    };
-	
-	    lib$es6$promise$enumerator$$Enumerator.prototype._settledAt = function(state, i, value) {
-	      var promise = this.promise;
-	
-	      if (promise._state === lib$es6$promise$$internal$$PENDING) {
-	        this._remaining--;
-	
-	        if (state === lib$es6$promise$$internal$$REJECTED) {
-	          lib$es6$promise$$internal$$reject(promise, value);
-	        } else {
-	          this._result[i] = value;
-	        }
-	      }
-	
-	      if (this._remaining === 0) {
-	        lib$es6$promise$$internal$$fulfill(promise, this._result);
-	      }
-	    };
-	
-	    lib$es6$promise$enumerator$$Enumerator.prototype._willSettleAt = function(promise, i) {
-	      var enumerator = this;
-	
-	      lib$es6$promise$$internal$$subscribe(promise, undefined, function(value) {
-	        enumerator._settledAt(lib$es6$promise$$internal$$FULFILLED, i, value);
-	      }, function(reason) {
-	        enumerator._settledAt(lib$es6$promise$$internal$$REJECTED, i, reason);
-	      });
 	    };
 	    function lib$es6$promise$polyfill$$polyfill() {
 	      var local;
@@ -70257,13 +70270,14 @@
 	exports.default = ClearHistory;
 
 /***/ },
-/* 729 */
+/* 729 */,
+/* 730 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(730);
+	var content = __webpack_require__(731);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(732)(content, {});
@@ -70283,73 +70297,17 @@
 	}
 
 /***/ },
-/* 730 */
+/* 731 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(731)();
+	exports = module.exports = __webpack_require__(733)();
 	// imports
 	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Amatic+SC|Karla|Grand+Hotel);", ""]);
 	
 	// module
-	exports.push([module.id, "/*//Compass imports\n\n//External Libraries\n@import 'susy';\n@import 'breakpoint';*/\nbody {\n  font-family: \"ABeeZee\";\n  font-size: 16px; }\n\na {\n  text-decoration: none; }\n\n*, *:before, *:after {\n  box-sizing: border-box; }\n\nhtml, body {\n  height: 100%; }\n\nbutton {\n  border-radius: 0; }\n\n.home {\n  /*.slide6 {\n    background-image: url('./../assets/mexican_restaurant.jpg');\n  }*/ }\n  .home .container {\n    margin: 0 auto;\n    padding-top: 50px; }\n    .home .container .btn {\n      background-color: #5CAB8C;\n      border-radius: 0;\n      width: 35%;\n      max-width: 170px;\n      border-color: #519d7f; }\n      .home .container .btn:hover {\n        background-color: #519d7f;\n        border-color: #519d7f; }\n      .home .container .btn .btn-success {\n        border-color: #519d7f; }\n  .home .logo {\n    display: block;\n    width: 70%;\n    max-width: 400px;\n    margin: 0 auto; }\n  .home .lead {\n    color: white; }\n  .home .slide1, .home .slide2, .home .slide3, .home .slide4, .home .slide5 {\n    min-height: 560px;\n    background-size: cover;\n    background-position: center center; }\n  .home .slide1 {\n    background-image: url(https://tinypapers.files.wordpress.com/2013/02/032_5.jpg); }\n  .home .slide2 {\n    background-image: url(http://travelchannel.sndimg.com/content/dam/images/travel/fullset/2012/05/17/ab/nashville-gac-restaurants-merchants.rend.tccom.616.462.jpeg); }\n  .home .slide3 {\n    background-image: url(https://www.theavantguardian.com/wp-content/uploads/2014/01/IMG_4662.jpg); }\n  .home .slide4 {\n    background-image: url(http://www.sanfrancisco.travel/sites/sftraveldev.prod.acquia-sites.com/files/field/image/starbelly_sf_large_party_table.jpg); }\n  .home .slide5 {\n    background-image: url(https://i2.wp.com/wanderfulworldtac.files.wordpress.com/2013/06/nyhavn-night-b-w.jpg); }\n  .home .carousel.carousel-fade .item {\n    -webkit-transition: opacity 1s linear;\n    -moz-transition: opacity 1s linear;\n    -ms-transition: opacity 1s linear;\n    -o-transition: opacity 1s linear;\n    transition: opacity 1s linear;\n    opacity: .5; }\n  .home .carousel.carousel-fade .active.item {\n    opacity: 1; }\n  .home .carousel.carousel-fade .active.left,\n  .home .carousel.carousel-fade .active.right {\n    left: 0;\n    z-index: 2;\n    opacity: 0;\n    filter: alpha(opacity=0); }\n  .home .carousel-overlay {\n    position: absolute;\n    bottom: 100px;\n    right: 0;\n    left: 0; }\n  .home .about {\n    background-color: white; }\n    .home .about .about-title {\n      background-color: white;\n      padding: 30px;\n      /*font-family: 'Amatic SC', cursive;*/\n      font-family: 'Grand Hotel', cursive;\n      font-size: 60px;\n      font-weight: bold; }\n    .home .about .steps {\n      text-align: center;\n      display: flex;\n      justify-content: center;\n      flex-direction: column;\n      height: 100%;\n      margin: 0px;\n      padding-left: 30px;\n      padding-right: 30px;\n      padding-bottom: 30px; }\n      .home .about .steps .step {\n        padding: 15px;\n        width: 90%;\n        text-align: center;\n        font-size: 20px;\n        background-color: #F8FAF5;\n        display: block; }\n      .home .about .steps .describe {\n        padding-left: 20px;\n        padding-right: 20px;\n        font-size: 25px;\n        font-family: 'Karla'; }\n    .home .about .gif {\n      padding: 50px;\n      text-align: center;\n      background-size: cover;\n      height: 600px;\n      margin-top: -50px; }\n  .home .purpose {\n    width: 100%;\n    padding: 0px;\n    margin: 0px; }\n    .home .purpose .description {\n      margin: 0px;\n      padding: 30px;\n      color: white;\n      background-color: black;\n      text-align: left;\n      font-size: 20px; }\n    .home .purpose .right {\n      margin: 0px;\n      padding: 30px;\n      text-align: right;\n      color: white;\n      background-color: black;\n      font-size: 20px; }\n    .home .purpose .how1 {\n      width: 100%;\n      height: 400px;\n      background-image: url(http://www.saviobianconi.com/wp-content/uploads/2015/02/saviobianconi_photographers_thailand_1.jpg);\n      background-size: cover;\n      margin: 0px; }\n    .home .purpose .how2 {\n      width: 100%;\n      height: 400px;\n      background-image: url(https://reflectionsofchina.files.wordpress.com/2012/03/shanghais-busy-streets.jpg);\n      background-size: cover;\n      margin: 0px; }\n    .home .purpose .how3 {\n      width: 100%;\n      height: 400px;\n      background-image: url(https://cdn1.vox-cdn.com/thumbor/QiFK-MP_zfNG6Lr4fpLwqJvysg0=/0x105:2000x1230/1310x737/cdn0.vox-cdn.com/uploads/chorus_image/image/46276926/20150303-Mu_Ramen--10.0.0.0.0.jpg);\n      background-size: cover;\n      margin: 0px; }\n  .home .team {\n    background-color: #F8FAF5;\n    width: 100%;\n    padding: 20px;\n    text-align: center; }\n    .home .team .team-title {\n      padding: 50px;\n      font-family: 'Grand Hotel', cursive;\n      font-size: 60px;\n      font-weight: bold; }\n    .home .team .team-member {\n      text-align: center;\n      padding: 30px; }\n      .home .team .team-member .member-name {\n        /*color: $green;*/\n        padding: 5px; }\n      .home .team .team-member .img-circle {\n        height: 170px; }\n      .home .team .team-member .fa {\n        /*color:#333;*/\n        color: #5CAB8C; }\n\n.poll-header {\n  margin-bottom: 100px; }\n  .poll-header h1 {\n    margin: 20px auto;\n    text-align: center; }\n\n.poll .choice-one, .poll .choice-two {\n  text-align: center;\n  padding: 40px; }\n\n.poll .choice-one h2, .poll .choice-two h2 {\n  color: #fff;\n  margin: 20px auto; }\n\n.poll .choice-one {\n  background-color: #5CAB8C; }\n\n.poll .choice-two {\n  background-color: #24313c; }\n\n.poll img {\n  border-radius: 50%;\n  text-align: center;\n  box-shadow: 0 4px 10px 4px;\n  cursor: pointer; }\n\n.spinner {\n  text-align: center;\n  margin-top: 80px; }\n\n.cursive {\n  font-family: \"Grand Hotel\";\n  font-size: 90px;\n  font-size: 5.625rem;\n  margin-bottom: 60px; }\n\n.cancel-button {\n  margin-left: 20px; }\n\n.profile div {\n  background-color: green; }\n\n.history-header h1 {\n  margin: 20px auto;\n  margin-top: 80px;\n  text-align: center; }\n\n.non-button a, .non-button a:link, .non-button a:visited, .non-button a:hover, .non-button a:active {\n  color: #5CAB8C; }\n\n.navbar {\n  margin-bottom: 0;\n  background-color: #24313c; }\n  .navbar img {\n    display: inline-block;\n    width: 120px;\n    height: auto; }\n  .navbar .navbar-brand {\n    padding: 8px 15px; }\n  .navbar .navbar-nav li > a {\n    color: #fff; }\n    .navbar .navbar-nav li > a:hover, .navbar .navbar-nav li > a:active, .navbar .navbar-nav li > a:focus {\n      color: #5CAB8C; }\n  .navbar .navbar-nav .welcome-nav a:hover {\n    color: #fff;\n    cursor: default; }\n\n.add-friends, .user-friends {\n  align-items: stretch;\n  height: inherit;\n  text-align: center;\n  min-height: 450px;\n  padding-bottom: 20px; }\n  .add-friends h1, .user-friends h1 {\n    margin: 60px auto 40px auto;\n    color: #fff; }\n\n.add-friends {\n  background-color: #24313c; }\n  .add-friends input {\n    height: 40px;\n    font-size: 24px;\n    font-size: 1.5rem; }\n\n.user-friends {\n  background-color: #5CAB8C; }\n  .user-friends ul > li > img {\n    display: inline-block;\n    max-width: 120px;\n    width: 30%;\n    height: auto;\n    text-align: left; }\n\n.input-group-addon {\n  background-color: #5CAB8C;\n  color: #fff;\n  font-size: 24px;\n  font-size: 1.5rem; }\n\n.friend-entry {\n  min-height: 150px; }\n  .friend-entry img {\n    border-radius: 50%;\n    width: 120px;\n    height: 120px;\n    display: inline-block;\n    position: absolute;\n    left: 20px;\n    bottom: 20px; }\n  .friend-entry h3 {\n    margin: 45px 0 30px 0; }\n\n.friends button,\n.add-friends button,\n.friend-entry .remove-diner {\n  width: 80px;\n  height: 30px;\n  background-color: #24313c;\n  color: #fff;\n  font-size: 20px;\n  font-size: 1.25rem;\n  float: right; }\n\n.add-user-container {\n  height: 100%;\n  width: 100%;\n  max-width: 1200px;\n  min-width: 40px;\n  min-height: 450px;\n  background-color: #24313c;\n  margin-bottom: 30px; }\n  .add-user-container .row {\n    display: flex; }\n\n.add-friends button {\n  background-color: #5CAB8C; }\n\n.add-friends-msg h4 {\n  color: #fff; }\n\n#dine-alone {\n  position: relative;\n  bottom: 0;\n  width: 200px;\n  padding: 15px;\n  font-size: 20px;\n  height: auto;\n  margin: 0 auto;\n  float: none;\n  margin-bottom: 30px; }\n\n@media (max-width: 895px) {\n  .add-friends {\n    height: 100%;\n    min-height: 380px; }\n  .add-friends, .user-friends {\n    flex-grow: 1; }\n  .add-user-container .row {\n    flex-wrap: wrap; }\n  #dine-alone {\n    margin-bottom: 30px; }\n  .friends {\n    padding-top: 5px; } }\n\n.btn {\n  height: 45px;\n  font-size: 26px;\n  font-size: 1.625rem;\n  letter-spacing: 1px;\n  color: #fff;\n  background-color: #5CAB8C;\n  border: 0.5px solid #519d7f;\n  border-radius: 0; }\n  .btn:hover, .btn:focus {\n    background: #519d7f;\n    color: #fff; }\n  .btn .btn-success {\n    background: #519d7f;\n    border-color: #519d7f; }\n\n.btn-left {\n  width: 80px;\n  height: 30px;\n  color: #fff;\n  font-size: 20px;\n  font-size: 1.25rem;\n  margin-right: 5px;\n  border: none; }\n\n.btn-right {\n  margin-left: 5px;\n  width: 80px;\n  height: 30px;\n  background-color: #24313c;\n  color: #fff;\n  font-size: 20px;\n  font-size: 1.25rem;\n  border: none; }\n\n.map {\n  text-align: center; }\n\n.saved-message {\n  color: #fff;\n  text-align: center; }\n\n.top-button {\n  margin-top: 5px;\n  margin-left: 5px;\n  margin-right: 5px;\n  margin-bottom: 10px; }\n\n.bottom {\n  padding-top: 15px;\n  padding-bottom: 100px; }\n\n.address {\n  margin-top: 10px; }\n\n.location-pref {\n  margin-top: 60px; }\n  .location-pref .location-error {\n    color: #fff; }\n  .location-pref h1 {\n    text-align: center;\n    font-size: 50px;\n    font-size: 3.125rem;\n    margin: 40px auto; }\n  .location-pref .enter-location, .location-pref .current-location {\n    background-color: #24313c;\n    height: 450px;\n    margin: 20px;\n    text-align: center;\n    box-shadow: 0 2px 2px 2px; }\n  .location-pref img {\n    display: inline-block;\n    margin-top: 30px;\n    height: 80px;\n    width: 80px; }\n  .location-pref .btn {\n    background-color: #5CAB8C; }\n  .location-pref .input-container form {\n    width: 80%;\n    margin: 0 auto; }\n  .location-pref .input-container input {\n    display: block;\n    height: 50px;\n    margin-bottom: 10px; }\n  .location-pref .input-container button {\n    height: 50px;\n    margin: 0 auto;\n    border-radius: 0;\n    color: #fff;\n    font-size: 30px;\n    font-size: 1.875rem; }\n  .location-pref .location-text-container {\n    text-align: center;\n    padding-top: 60px;\n    font-size: 36px;\n    font-size: 2.25rem;\n    margin-bottom: 20px;\n    color: #fff; }\n  .location-pref .current-location button {\n    margin-top: 50px;\n    width: 80%; }\n\n.loginmodal .form-group {\n  margin: 25px 0; }\n\n.loginmodal .login-error {\n  display: inline-block;\n  width: 50%;\n  color: #fff;\n  padding-top: 5px; }\n\n.loginmodal .error-right {\n  display: block;\n  float: right;\n  padding-left: 10px; }\n\n.loginmodal .form-error {\n  width: 100%;\n  text-align: center; }\n\n.modal-content .modal-header {\n  border-bottom: none;\n  padding: 0; }\n  .modal-content .modal-header .close {\n    color: #fff;\n    font-size: 60px;\n    font-size: 3.75rem;\n    margin-top: -30px;\n    opacity: 0.8; }\n\n.loginmodal .modal-content {\n  background-color: #24313c;\n  margin: 40px auto;\n  padding: 40px;\n  box-shadow: 0 4px 10px 4px; }\n  .loginmodal .modal-content .modalbody {\n    padding: 0; }\n    .loginmodal .modal-content .modalbody .submit {\n      background-color: #5CAB8C;\n      color: #fff;\n      height: 65px;\n      font-size: 45px;\n      font-size: 2.8125rem;\n      font-weight: bold;\n      font-family: \"ABeeZee\";\n      letter-spacing: 3px;\n      border-radius: 0;\n      cursor: pointer; }\n      .loginmodal .modal-content .modalbody .submit:hover, .loginmodal .modal-content .modalbody .submit:focus {\n        background: #519d7f; }\n    .loginmodal .modal-content .modalbody .name-input {\n      display: inline-block;\n      width: 48%;\n      margin-bottom: 0; }\n    .loginmodal .modal-content .modalbody div.name-input:first-child {\n      margin-right: 4%; }\n    .loginmodal .modal-content .modalbody div.name-input:last-child {\n      float: right;\n      margin-left: 2%; }\n    .loginmodal .modal-content .modalbody input {\n      display: block;\n      height: 45px;\n      font-size: 26px;\n      font-size: 1.625rem;\n      letter-spacing: 1px;\n      color: #707070;\n      background-color: inherit;\n      border: 0.5px solid #fff;\n      border-radius: 0; }\n    .loginmodal .modal-content .modalbody .username {\n      margin-top: -5px; }\n    .loginmodal .modal-content .modalbody .toggle {\n      color: #fff;\n      text-align: center; }\n      .loginmodal .modal-content .modalbody .toggle a {\n        color: #5CAB8C;\n        cursor: pointer; }\n    .loginmodal .modal-content .modalbody .google {\n      margin-top: 10px; }\n\n.register-spinner {\n  text-align: center; }\n  .register-spinner h3 {\n    color: #fff; }\n", ""]);
+	exports.push([module.id, "/*//Compass imports\n\n//External Libraries\n@import 'susy';\n@import 'breakpoint';*/\nbody {\n  font-family: \"ABeeZee\";\n  font-size: 16px; }\n\na {\n  text-decoration: none; }\n\n*, *:before, *:after {\n  box-sizing: border-box; }\n\nhtml, body {\n  height: 100%; }\n\nbutton {\n  border-radius: 0; }\n\n.home {\n  /*.slide6 {\n    background-image: url('./../assets/mexican_restaurant.jpg');\n  }*/ }\n  .home .container {\n    margin: 0 auto;\n    padding-top: 50px; }\n    .home .container .btn {\n      background-color: #5CAB8C;\n      border-radius: 0;\n      width: 35%;\n      max-width: 170px;\n      border-color: #519d7f; }\n      .home .container .btn:hover {\n        background-color: #519d7f;\n        border-color: #519d7f; }\n      .home .container .btn .btn-success {\n        border-color: #519d7f; }\n  .home .logo {\n    display: block;\n    width: 70%;\n    max-width: 400px;\n    margin: 0 auto; }\n  .home .lead {\n    color: white; }\n  .home .slide1, .home .slide2, .home .slide3, .home .slide4, .home .slide5 {\n    min-height: 560px;\n    background-size: cover;\n    background-position: center center; }\n  .home .slide1 {\n    background-image: url(https://tinypapers.files.wordpress.com/2013/02/032_5.jpg); }\n  .home .slide2 {\n    background-image: url(http://travelchannel.sndimg.com/content/dam/images/travel/fullset/2012/05/17/ab/nashville-gac-restaurants-merchants.rend.tccom.616.462.jpeg); }\n  .home .slide3 {\n    background-image: url(https://www.theavantguardian.com/wp-content/uploads/2014/01/IMG_4662.jpg); }\n  .home .slide4 {\n    background-image: url(http://www.sanfrancisco.travel/sites/sftraveldev.prod.acquia-sites.com/files/field/image/starbelly_sf_large_party_table.jpg); }\n  .home .slide5 {\n    background-image: url(https://i2.wp.com/wanderfulworldtac.files.wordpress.com/2013/06/nyhavn-night-b-w.jpg); }\n  .home .carousel.carousel-fade .item {\n    -webkit-transition: opacity 1s linear;\n    -moz-transition: opacity 1s linear;\n    -ms-transition: opacity 1s linear;\n    -o-transition: opacity 1s linear;\n    transition: opacity 1s linear;\n    opacity: .5; }\n  .home .carousel.carousel-fade .active.item {\n    opacity: 1; }\n  .home .carousel.carousel-fade .active.left,\n  .home .carousel.carousel-fade .active.right {\n    left: 0;\n    z-index: 2;\n    opacity: 0;\n    filter: alpha(opacity=0); }\n  .home .carousel-overlay {\n    position: absolute;\n    bottom: 100px;\n    right: 0;\n    left: 0; }\n  .home .about {\n    background-color: white; }\n    .home .about .about-title {\n      background-color: white;\n      padding: 30px;\n      /*font-family: 'Amatic SC', cursive;*/\n      font-family: 'Grand Hotel', cursive;\n      font-size: 60px;\n      font-weight: bold; }\n    .home .about .steps {\n      text-align: center;\n      display: flex;\n      justify-content: center;\n      flex-direction: column;\n      height: 100%;\n      margin: 0px;\n      padding-left: 30px;\n      padding-right: 30px;\n      padding-bottom: 30px; }\n      .home .about .steps .step {\n        padding: 15px;\n        width: 90%;\n        text-align: center;\n        font-size: 20px;\n        background-color: #F8FAF5;\n        display: block; }\n      .home .about .steps .describe {\n        padding-left: 20px;\n        padding-right: 20px;\n        font-size: 25px;\n        font-family: 'Karla'; }\n    .home .about .gif {\n      padding: 50px;\n      text-align: center;\n      background-size: cover;\n      height: 600px;\n      margin-top: -50px; }\n  .home .purpose {\n    width: 100%;\n    padding: 0px;\n    margin: 0px; }\n    .home .purpose .description {\n      margin: 0px;\n      padding: 30px;\n      color: white;\n      background-color: black;\n      text-align: left;\n      font-size: 20px; }\n    .home .purpose .right {\n      margin: 0px;\n      padding: 30px;\n      text-align: right;\n      color: white;\n      background-color: black;\n      font-size: 20px; }\n    .home .purpose .how1 {\n      width: 100%;\n      height: 400px;\n      background-image: url(http://www.saviobianconi.com/wp-content/uploads/2015/02/saviobianconi_photographers_thailand_1.jpg);\n      background-size: cover;\n      margin: 0px; }\n    .home .purpose .how2 {\n      width: 100%;\n      height: 400px;\n      background-image: url(https://reflectionsofchina.files.wordpress.com/2012/03/shanghais-busy-streets.jpg);\n      background-size: cover;\n      margin: 0px; }\n    .home .purpose .how3 {\n      width: 100%;\n      height: 400px;\n      background-image: url(https://cdn1.vox-cdn.com/thumbor/QiFK-MP_zfNG6Lr4fpLwqJvysg0=/0x105:2000x1230/1310x737/cdn0.vox-cdn.com/uploads/chorus_image/image/46276926/20150303-Mu_Ramen--10.0.0.0.0.jpg);\n      background-size: cover;\n      margin: 0px; }\n  .home .team {\n    background-color: #F8FAF5;\n    width: 100%;\n    padding: 20px;\n    text-align: center; }\n    .home .team .team-title {\n      padding: 50px;\n      font-family: 'Grand Hotel', cursive;\n      font-size: 60px;\n      font-weight: bold; }\n    .home .team .team-member {\n      text-align: center;\n      padding: 30px; }\n      .home .team .team-member .member-name {\n        /*color: $green;*/\n        padding: 5px; }\n      .home .team .team-member .img-circle {\n        height: 170px; }\n      .home .team .team-member .fa {\n        /*color:#333;*/\n        color: #5CAB8C; }\n\n.poll-header {\n  margin-bottom: 100px; }\n  .poll-header h1 {\n    margin: 20px auto;\n    text-align: center; }\n\n.poll .choice-one, .poll .choice-two {\n  text-align: center;\n  padding: 40px; }\n\n.poll .choice-one h2, .poll .choice-two h2 {\n  color: #fff;\n  margin: 20px auto; }\n\n.poll .choice-one {\n  background-color: #5CAB8C; }\n\n.poll .choice-two {\n  background-color: #24313c; }\n\n.poll img {\n  border-radius: 50%;\n  text-align: center;\n  box-shadow: 0 4px 10px 4px;\n  cursor: pointer; }\n\n.spinner {\n  text-align: center;\n  margin-top: 80px; }\n\n.cursive {\n  font-family: \"Grand Hotel\";\n  font-size: 90px;\n  font-size: 5.625rem;\n  margin-bottom: 60px; }\n\n.cancel-button {\n  margin-left: 20px; }\n\n.profile div {\n  background-color: green; }\n\n.history-header h1 {\n  margin: 20px auto;\n  margin-top: 80px;\n  text-align: center; }\n\n.non-button a, .non-button a:link, .non-button a:visited, .non-button a:hover, .non-button a:active {\n  color: #5CAB8C; }\n\n.margin-bottom {\n  margin-bottom: 20px; }\n\n.navbar {\n  margin-bottom: 0;\n  background-color: #24313c; }\n  .navbar img {\n    display: inline-block;\n    width: 120px;\n    height: auto; }\n  .navbar .navbar-brand {\n    padding: 8px 15px; }\n  .navbar .navbar-nav li > a {\n    color: #fff; }\n    .navbar .navbar-nav li > a:hover, .navbar .navbar-nav li > a:active, .navbar .navbar-nav li > a:focus {\n      color: #5CAB8C; }\n  .navbar .navbar-nav .welcome-nav a:hover {\n    color: #fff;\n    cursor: default; }\n\n.add-friends, .user-friends {\n  align-items: stretch;\n  height: inherit;\n  text-align: center;\n  min-height: 450px;\n  padding-bottom: 20px; }\n  .add-friends h1, .user-friends h1 {\n    margin: 60px auto 40px auto;\n    color: #fff; }\n\n.add-friends {\n  background-color: #24313c; }\n  .add-friends input {\n    height: 40px;\n    font-size: 24px;\n    font-size: 1.5rem; }\n\n.user-friends {\n  background-color: #5CAB8C; }\n  .user-friends ul > li > img {\n    display: inline-block;\n    max-width: 120px;\n    width: 30%;\n    height: auto;\n    text-align: left; }\n\n.input-group-addon {\n  background-color: #5CAB8C;\n  color: #fff;\n  font-size: 24px;\n  font-size: 1.5rem; }\n\n.friend-entry {\n  min-height: 150px; }\n  .friend-entry img {\n    border-radius: 50%;\n    width: 120px;\n    height: 120px;\n    display: inline-block;\n    position: absolute;\n    left: 20px;\n    bottom: 20px; }\n  .friend-entry h3 {\n    margin: 45px 0 30px 0; }\n\n.friends button,\n.add-friends button,\n.friend-entry .remove-diner {\n  width: 80px;\n  height: 30px;\n  background-color: #24313c;\n  color: #fff;\n  font-size: 20px;\n  font-size: 1.25rem;\n  float: right; }\n\n.add-user-container {\n  height: 100%;\n  width: 100%;\n  max-width: 1200px;\n  min-width: 40px;\n  min-height: 450px;\n  background-color: #24313c;\n  margin-bottom: 30px; }\n  .add-user-container .row {\n    display: flex; }\n\n.add-friends button {\n  background-color: #5CAB8C; }\n\n.add-friends-msg h4 {\n  color: #fff; }\n\n#dine-alone {\n  position: relative;\n  bottom: 0;\n  width: 200px;\n  padding: 15px;\n  font-size: 20px;\n  height: auto;\n  margin: 0 auto;\n  float: none;\n  margin-bottom: 30px; }\n\n@media (max-width: 895px) {\n  .add-friends {\n    height: 100%;\n    min-height: 380px; }\n  .add-friends, .user-friends {\n    flex-grow: 1; }\n  .add-user-container .row {\n    flex-wrap: wrap; }\n  #dine-alone {\n    margin-bottom: 30px; }\n  .friends {\n    padding-top: 5px; } }\n\n.btn {\n  height: 45px;\n  font-size: 26px;\n  font-size: 1.625rem;\n  letter-spacing: 1px;\n  color: #fff;\n  background-color: #5CAB8C;\n  border: 0.5px solid #519d7f;\n  border-radius: 0; }\n  .btn:hover, .btn:focus {\n    background: #519d7f;\n    color: #fff; }\n  .btn .btn-success {\n    background: #519d7f;\n    border-color: #519d7f; }\n\n.btn-left {\n  width: 80px;\n  height: 30px;\n  color: #fff;\n  font-size: 20px;\n  font-size: 1.25rem;\n  margin-right: 5px;\n  border: none; }\n\n.btn-right {\n  margin-left: 5px;\n  width: 80px;\n  height: 30px;\n  background-color: #24313c;\n  color: #fff;\n  font-size: 20px;\n  font-size: 1.25rem;\n  border: none; }\n\n.map {\n  text-align: center; }\n\n.saved-message {\n  color: #fff;\n  text-align: center; }\n\n.top-button {\n  margin-top: 5px;\n  margin-left: 5px;\n  margin-right: 5px;\n  margin-bottom: 10px; }\n\n.bottom {\n  padding-top: 15px;\n  padding-bottom: 100px; }\n\n.address {\n  margin-top: 10px; }\n\n.location-pref {\n  margin-top: 60px; }\n  .location-pref .location-error {\n    color: #fff; }\n  .location-pref h1 {\n    text-align: center;\n    font-size: 50px;\n    font-size: 3.125rem;\n    margin: 40px auto; }\n  .location-pref .enter-location, .location-pref .current-location {\n    background-color: #24313c;\n    height: 450px;\n    margin: 20px;\n    text-align: center;\n    box-shadow: 0 2px 2px 2px; }\n  .location-pref img {\n    display: inline-block;\n    margin-top: 30px;\n    height: 80px;\n    width: 80px; }\n  .location-pref .btn {\n    background-color: #5CAB8C; }\n  .location-pref .input-container form {\n    width: 80%;\n    margin: 0 auto; }\n  .location-pref .input-container input {\n    display: block;\n    height: 50px;\n    margin-bottom: 10px; }\n  .location-pref .input-container button {\n    height: 50px;\n    margin: 0 auto;\n    border-radius: 0;\n    color: #fff;\n    font-size: 30px;\n    font-size: 1.875rem; }\n  .location-pref .location-text-container {\n    text-align: center;\n    padding-top: 60px;\n    font-size: 36px;\n    font-size: 2.25rem;\n    margin-bottom: 20px;\n    color: #fff; }\n  .location-pref .current-location button {\n    margin-top: 50px;\n    width: 80%; }\n\n.loginmodal .form-group {\n  margin: 25px 0; }\n\n.loginmodal .login-error {\n  display: inline-block;\n  width: 50%;\n  color: #fff;\n  padding-top: 5px; }\n\n.loginmodal .error-right {\n  display: block;\n  float: right;\n  padding-left: 10px; }\n\n.loginmodal .form-error {\n  width: 100%;\n  text-align: center; }\n\n.modal-content .modal-header {\n  border-bottom: none;\n  padding: 0; }\n  .modal-content .modal-header .close {\n    color: #fff;\n    font-size: 60px;\n    font-size: 3.75rem;\n    margin-top: -30px;\n    opacity: 0.8; }\n\n.loginmodal .modal-content {\n  background-color: #24313c;\n  margin: 40px auto;\n  padding: 40px;\n  box-shadow: 0 4px 10px 4px; }\n  .loginmodal .modal-content .modalbody {\n    padding: 0; }\n    .loginmodal .modal-content .modalbody .submit {\n      background-color: #5CAB8C;\n      color: #fff;\n      height: 65px;\n      font-size: 45px;\n      font-size: 2.8125rem;\n      font-weight: bold;\n      font-family: \"ABeeZee\";\n      letter-spacing: 3px;\n      border-radius: 0;\n      cursor: pointer; }\n      .loginmodal .modal-content .modalbody .submit:hover, .loginmodal .modal-content .modalbody .submit:focus {\n        background: #519d7f; }\n    .loginmodal .modal-content .modalbody .name-input {\n      display: inline-block;\n      width: 48%;\n      margin-bottom: 0; }\n    .loginmodal .modal-content .modalbody div.name-input:first-child {\n      margin-right: 4%; }\n    .loginmodal .modal-content .modalbody div.name-input:last-child {\n      float: right;\n      margin-left: 2%; }\n    .loginmodal .modal-content .modalbody input {\n      display: block;\n      height: 45px;\n      font-size: 26px;\n      font-size: 1.625rem;\n      letter-spacing: 1px;\n      color: #707070;\n      background-color: inherit;\n      border: 0.5px solid #fff;\n      border-radius: 0; }\n    .loginmodal .modal-content .modalbody .username {\n      margin-top: -5px; }\n    .loginmodal .modal-content .modalbody .toggle {\n      color: #fff;\n      text-align: center; }\n      .loginmodal .modal-content .modalbody .toggle a {\n        color: #5CAB8C;\n        cursor: pointer; }\n    .loginmodal .modal-content .modalbody .google {\n      margin-top: 10px; }\n\n.register-spinner {\n  text-align: center; }\n  .register-spinner h3 {\n    color: #fff; }\n", ""]);
 	
 	// exports
-
-
-/***/ },
-/* 731 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-	
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-	
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
 
 
 /***/ },
@@ -70604,6 +70562,62 @@
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
+
+
+/***/ },
+/* 733 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
 
 
 /***/ }

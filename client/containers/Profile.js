@@ -42,7 +42,7 @@ class Profile extends React.Component {
     return(
       <div>
         <Navigation {...this.props} />
-        <div className='container'>
+        <div className='container margin-bottom'>
           {this.displayProfile()}
         </div>
       </div>
