@@ -7,6 +7,7 @@ var db = {uri: config.mongoURI};
 
 mongoose.connect(db.uri);
 db.Schema = mongoose.Schema;
+console.log('db object in db: ', db);
 db.userSchema = new db.Schema ({
   username: { type: String, required: true, unique: true },
   password: { type: String },
