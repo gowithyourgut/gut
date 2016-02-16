@@ -183,7 +183,6 @@ export const clearFriends = () => {
 
 //Main message friend function
 export const sendMessage = (messageObj) => {
-  console.log('messageObj in friendActions sendMessage: ', messageObj);
 
   return dispatch => {
     return fetch('http://localhost:5679/sms', {
@@ -194,7 +193,6 @@ export const sendMessage = (messageObj) => {
       },
       body: JSON.stringify(messageObj)
     }).then(response => {
-      console.log('response in friendActions sendMessage: ', response);
     }).catch(err => console.error('Error in Send Message: ',err));
   }
 }
