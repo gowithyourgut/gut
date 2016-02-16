@@ -21,7 +21,16 @@ class MessageFriends extends React.Component {
 
   concatFriends(){
     const { diners } = this.props;
-    let str = diners[0];
+
+    if(!str){
+      diners.shift()
+      diners.unshift({friendName: this.props.username});
+      let str = diners[0].friendName;
+    } else {
+      return str;
+    }
+
+    let str = diners[0].friendName;
     for(let i=1 ; i<diners.length ; i++){
       if(i === diners.length-1){
         str += ' & ' + diners[i].friendName;
@@ -30,32 +39,35 @@ class MessageFriends extends React.Component {
         str += ', ' + diners[i].friendName;
       }
     }
+
     return str;
   }
 
   triggerSendMessage(e){
     e.preventDefault();
+    e.stopPropagation();
     const { sendMessage } = this.props.friendActions;
     const { diners } = this.props;
     const { mobile_url } = this.props.topRestaurant;
     const message = this.refs.message;
 
-    diners.shift();
-
     const messageObj = {
-      message: message.value + '/n' + mobile_url,
+      message: message.value + '\n' + mobile_url,
       sendTo: diners,
     };
+
     sendMessage(messageObj);
+    this.props.closeMessageModal();
   }
 
   render(){
     return(
       <Modal
         show={this.props.showMessageModal}
-        onHide={this.props.closeMessageModal}
         className='loginmodal signin' >
-        <Modal.Header closeButton className='close-btn'>
+        <Modal.Header closeButton
+          className='close-btn'
+          onClick={this.props.closeMessageModal}>
         </Modal.Header>
         <Modal.Body className='modalbody'>
           <p className='toggle'>Send a message to {this.friendsString()}:</p>
@@ -64,12 +76,12 @@ class MessageFriends extends React.Component {
               <input
                 type='text'
                 className='form-control'
-                placeholder='Hey Peap! Lets meet up!'
+                placeholder='add a message for your friends...'
                 ref='message'/>
               <button
                 type='submit'
                 className='btn btn-block submit'
-                onClick={this.triggerSendMessage}>
+                  onClick={ this.triggerSendMessage }>
                 Send
               </button>
             </div>
